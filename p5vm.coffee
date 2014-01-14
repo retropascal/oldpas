@@ -1,20 +1,20 @@
 ###
-p5 virtual machine for coffeescript
- 
- this file is part of the "oldpas" ISO pascal compiler
- oldpas copyright (c) 2014 michal j wallace
- 
- available under the MIT license at:
- https://github.com/retropascal/oldpas
+coffeescript implementation of a the p5 virtual machine
 
-  references
- ----------
- port of p-code interpreter from:
-   https://github.com/retropascal/oldpas/blob/master/p5/pint.pas
- interpreter (for previous version, p4) is described in part 2 here:
-   http://homepages.cwi.nl/~steven/pascal/book/pascalimplementation.html
- p5 binaries/docs in svn at:
-   https://www.assembla.com/code/pascal-p5/subversion/nodes/55/trunk
+This file is part of the "oldpas" ISO pascal compiler
+Copyright (c) 2014 michal j wallace
+
+Available under the MIT license at:
+
+  https://github.com/retropascal/oldpas
+
+technical references:
+  online book about the interpreter (for older version but still relevant)
+    http://homepages.cwi.nl/~steven/pascal/book/pascalimplementation.html
+  recent p5 pascal implementation this file is based on:
+    https://github.com/retropascal/oldpas/blob/master/p5/pint.pas
+  for full docs, test suite, etc., see the p5 subversion repo:
+    https://www.assembla.com/code/pascal-p5/subversion/nodes/55/trunk
 ###
 
 assert = (truth, assertion)->
