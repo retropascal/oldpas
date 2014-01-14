@@ -409,7 +409,7 @@ const
       { version numbers }
     
       majorver   = 1; { major version number }
-      minorver   = 0; { minor version number }
+      minorver   = 2; { minor version number }
                 
 type
       { These equates define the instruction layout. I have choosen a 32 bit
@@ -2183,7 +2183,7 @@ begin (* main *)
                       end;
 
           13 (*ents*): begin getq; ad := mp + q; (*q = length of dataseg*)
-                          if sp >= np then errori('store overflow           ');
+                          if ad >= np then errori('store overflow           ');
                           { clear allocated memory }
                           while sp < ad do begin store[sp] := 0; sp := sp+1 end;
                           putadr(mp+marksb, sp) { set bottom of stack }

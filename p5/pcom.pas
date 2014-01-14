@@ -345,7 +345,7 @@ const
    { version numbers }
 
    majorver   = 1; { major version number }
-   minorver   = 0; { minor version number }
+   minorver   = 2; { minor version number }
 
 type                                                        (*describing:*)
                                                             (*************)
@@ -738,9 +738,11 @@ var
               putsub(p1) { release that element }
            end;
            putnams(p^.fstfld) { clear id list }
-        end else if p^.form = tagfld then
-           { recycle anonymous tag fields }
-           if p^.tagfieldp^.name = nil then putnam(p^.tagfieldp);
+        end else if p^.form = tagfld then begin
+              if p^.tagfieldp <> nil then
+                 { recycle anonymous tag fields }
+                 if p^.tagfieldp^.name = nil then putnam(p^.tagfieldp)
+        end;
         putstc(p) { release head entry }
      end;
   begin { putdsp }
@@ -1061,7 +1063,7 @@ var
   begin
     if errinx > 0 then   (*output error messages*)
       begin write(output,linecount:6,' ****  ':9);
-        lastpos := 0; freepos := 1;
+        lastpos := -1; freepos := 1;
         for k := 1 to errinx do
           begin
             with errlist[k] do
@@ -1110,14 +1112,14 @@ var
     11:  write('''['' expected');
     12:  write(''']'' expected');
     13:  write('''end'' expected');
-    14:  write(''':'' expected');
+    14:  write(''';'' expected');
     15:  write('Integer expected');
     16:  write('''='' expected');
     17:  write('''begin'' expected');
     18:  write('Error in declaration part');
     19:  write('Error in field-list');
     20:  write(''','' expected');
-    21:  write('''*'' expected');
+    21:  write('''.'' expected');
 
     50:  write('Error in constant');
     51:  write(''':='' expected');
@@ -1309,18 +1311,18 @@ var
       repeat nextch;
         if ch <> '*' then
           begin
-            if ch = 't' then
+            if lcase(ch) = 't' then
               begin nextch; prtables := ch = '+' end
             else
-              if ch = 'l' then
+              if lcase(ch) = 'l' then
                 begin nextch; list := ch = '+';
                   if not list then writeln(output)
                 end
               else
-             if ch = 'd' then
+             if lcase(ch) = 'd' then
                begin nextch; debug := ch = '+' end
              else
-                if ch = 'c' then
+                if lcase(ch) = 'c' then
                   begin nextch; prcode := ch = '+' end;
             nextch
           end
@@ -5017,7 +5019,7 @@ var
     var extfp:extfilep;
   begin
     if sy = progsy then
-      begin insymbol; if sy <> ident then error(2); insymbol;
+      begin insymbol; if sy <> ident then error(2) else insymbol;
         if not (sy in [lparent,semicolon]) then error(14);
         if sy = lparent  then
           begin
@@ -5036,10 +5038,10 @@ var
               else error(2)
             until sy <> comma;
             if sy <> rparent then error(4);
-            insymbol
+            insymbol;
+            if sy <> semicolon then error(14)
           end;
-        if sy <> semicolon then error(14)
-        else insymbol;
+        if sy = semicolon then insymbol
       end else error(3);
     repeat block(fsys,period,nil);
       if sy <> period then error(21)
