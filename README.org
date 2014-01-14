@@ -38,8 +38,8 @@ In contrast to ~P5~, ~oldpas~ will:
 
 In addition to the derived dual-stack virtual machine written in pascal and explained above, this project will produce two virtual machines capable of running inside a web browser:
 
-- [ ] ~p5vm.cf~ :: a direct port of the original P5 virtual machine, written in the [[http://coffeescript.org/][coffeescript]] language for clarity.
-- [ ] ~rpvm.js~ :: an implementation of the target dual-stack machine, optimized for maximum performance in modern web browsers.
+- [ ] ~p5vm.cf~ - a direct port of the original P5 virtual machine, written in the [[http://coffeescript.org/][coffeescript]] language for clarity.
+- [ ] ~rpvm.js~ - an implementation of the target dual-stack machine, optimized for maximum performance in modern web browsers.
 
 * Literalization
 
@@ -69,7 +69,7 @@ Any compiler that supports the ISO standard should be able to compile and run ~o
 
 In particular, ~oldpas~ is compatible with ~fpc~, the excellent [[http://www.freepascal.org/][free pascal compiler]], which can produce native code for a wide variety of processors.
 
-Although ~oldpas~ cannot run code written for turbo pascal or delphi, ~fpc~ can[fn:1], and thus Borland-style pascal and ISO pascal can be combined in the same program.
+Although ~oldpas~ cannot run code written for delphi, ~fpc~ can, and thus Borland-style pascal and ISO pascal can be combined in the same program.
 
 The planned /retro pascal/ language will introduce a variety of syntactic changes, but is intended to remain compatable with code written for delphi by way of free pascal's ISO mode.
 
@@ -77,6 +77,3 @@ Therefore it is likely that ~retpas~ will simply add a new parser and a series o
 
 Finally, the refactored virtual machine is designed to be extensible in free pascal, so that both ISO and retro pascal can be used as a scripting language in free pascal applications.
 
-* Footnotes
-
-[fn:1] ~fpc~ understands turbo pascal syntax, but code for turbo pascal usually requires cleanup due to diferences between old and new operating systems, processors, etc.
