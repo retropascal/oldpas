@@ -1,0 +1,82 @@
+* Introduction
+
+This repository contains ~oldpas~, a compiler for ISO 7185 standard pascal, which will target a small forth-style dual-stack virtual machine.
+
+The purpose of this project is to prototype ~retpas~, a planned compiler for a new pascal dialect called /retro pascal/.
+
+The philosophy here is twofold:
+
+1. Separate the work of designing the retro pascal language from the design of its compiler and virtual machine.
+
+2. Start and end with a tested, working system, /keeping/ it working at each step along the way.
+
+Therefore, ~oldpas~ is not really a development project but rather a /refactoring/ project.
+
+* Origins
+
+The prototype is derived from the public domain ~P5~ compiler.
+
+~P5~ is a member of the [[http://www.moorecad.com/standardpascal/PascalP.html][pascal-p series]] of reference compilers, created originally by Niklaus Wirth and his students at ETH Zurich, [[http://homepages.cwi.nl/~steven/pascal][documented in detail]] by Steven Pemberton and Martin Daniels, and [[http://www.moorecad.com/standardpascal/p5.html][updated to the ISO 7185 standard]] by Scott A. Moore.
+
+~P5~ performs single pass compilation of pascal source code, meaning that input files are scanned from top to bottom and code is generated immediately for each language construct immediately as it parsed. The generated code is an idealized assembly language called /p-code/, which is then assembled and run on a small interpreter (virtual machine).
+
+* (Planned) Differences from ~P5~
+
+Although this prototype is derived from ~P5~, the two compilers will bear little resemblence to each other.
+
+The word /derived/ here is meant in the mathematical sense: our approach is to start with the working P5 compiler and, through series of meaning-producing transformations (or *refactorings*), produce a /completely different, yet logically equivalent/ compiler.
+
+In contrast to ~P5~, ~oldpas~ will:
+
+- [ ] Separate lexical analysis, parsing, code generation, assembly, and execution into logically distinct modules.
+- [ ] Introduce an intermediate /abstract syntax tree/ on which optimizations may be performed.
+- [ ] Replace the hand-coded recursive descent parser with a generic, data-driven parser.
+- [ ] Replace the traditional single-stack virtual machine with a dual-stack architecture inspired by forth.
+- [ ] Introduce a pre-processing step for literate programming, described in the /Literalization/ section below.
+
+* Virtual Machines
+
+In addition to the derived dual-stack virtual machine written in pascal and explained above, this project will produce two virtual machines capable of running inside a web browser:
+
+- [ ] ~p5vm.cf~ :: a direct port of the original P5 virtual machine, written in the [[http://coffeescript.org/][coffeescript]] language for clarity.
+- [ ] ~rpvm.js~ :: an implementation of the target dual-stack machine, optimized for maximum performance in modern web browsers.
+
+* Literalization
+
+To perform the above transformations in a safe and step-by-step manner, we will use ~WEB~, [[http://texcatalogue.sarovar.org/entries/web.html][the original literate programming system]], created in 1976 by Donald E. Knuth.
+
+~WEB~ is programming language that closely resembles pascal, but provides a flexible macro facility and the ability to mix the pascal with richly formatted documentation, written in ~TeX~.
+
+The key feature of a literate programming tool is that it allows you to present the source code in whatever order makes it easiest for humans to understand. Thus, ~WEB~ consists of two programs:
+
+- ~TANGLE~ translates a ~WEB~ file and generates raw pascal source code in the order the pascal compiler requires.
+- ~WEAVE~ translates a ~WEB~ file to pure ~TeX~, adding section numbers, cross references, pretty printing (a kind of syntax highlighting), an index and table of contents, etc. ~TeX~ can then translate this into a device independent representation for publication or display.
+
+Since both of these programs are themselves written in ~WEB~, a pre-generated ~TANGLE.PAS~ is included for bootstrapping.
+
+* (Planned) Differences from ~WEB~
+
+~WEB~ predates the ISO pascal standard, was intended to compile on a wide variety of mutually incompatible pascal dialects, some of which had not yet even adopted the ASCII character set.
+
+- [ ] Remove code for non-ASCII text encodings (with the possible exception of UTF-8)
+- [ ] Update the syntax to ISO 7185 standard pascal.
+- [ ] Remove code to support nonstandard pascal dialects.
+- [ ] Consolidate the parsing system with the new generic parser from ~oldpas~.
+
+* Relationship to Other Pascal Implementations
+
+Any compiler that supports the ISO standard should be able to compile and run ~oldpas~.
+
+In particular, ~oldpas~ is compatible with ~fpc~, the excellent [[http://www.freepascal.org/][free pascal compiler]], which can produce native code for a wide variety of processors.
+
+Although ~oldpas~ cannot run code written for turbo pascal or delphi, ~fpc~ can[fn:1], and thus Borland-style pascal and ISO pascal can be combined in the same program.
+
+The planned /retro pascal/ language will introduce a variety of syntactic changes, but is intended to remain compatable with code written for delphi by way of free pascal's ISO mode.
+
+Therefore it is likely that ~retpas~ will simply add a new parser and a series of tree transformations to produce ~oldpas~-compatable abstract syntax trees. If this is the case, then ~retpas~ will simply become a frontend for ~oldpas~, and a pretty-printer will be added to generate ISO pascal code from the internal representation.
+
+Finally, the refactored virtual machine is designed to be extensible in free pascal, so that both ISO and retro pascal can be used as a scripting language in free pascal applications.
+
+* Footnotes
+
+[fn:1] ~fpc~ understands turbo pascal syntax, but code for turbo pascal usually requires cleanup due to diferences between old and new operating systems, processors, etc.
